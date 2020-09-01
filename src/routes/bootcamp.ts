@@ -1,4 +1,4 @@
-import express, { Request , Response } from 'express'
+import express from 'express'
 
 //controller bootcamps
 import {
@@ -7,7 +7,7 @@ import {
     deleteBootcamp,
     updateBootcamp,
     createBootcamp
-} from '../controller/bootcamps'
+} from '../controllers/bootcamps'
 
 const router = express.Router()
 

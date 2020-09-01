@@ -1,14 +1,24 @@
 import {Request , Response} from 'express'
 
+// bootcamp model
+import bootcampModel from '../models/bootcamps'
+
 // @desc    get all bootcamps
 // @route   GET api/v1/bootcamps
 // @access  Public
 export const getBootcamps = (req: Request , res: Response) => {
+
+    bootcampModel.create(req.body).then(data => {
+    
     res
-    .status(200)
-    .json({
-        success: true , msg:`Get all bootcamps`
+        .status(201)
+        .json({
+            success: true,
+            data: data
+        })
     })
+
+    
 }
 
 // @desc    get a bootcamp
@@ -26,11 +36,19 @@ export const getBootcamp = (req: Request , res: Response) => {
 // @route   POST api/v1/bootcamps
 // @access  Public
 export const createBootcamp = (req: Request , res: Response) => {
-    res
-    .status(200)
-    .json({
-        success: true , msg:`Create a new Bootcamp`
-    })
+    bootcampModel.create(req.body).then(data => {
+    
+        res
+            .status(201)
+            .json({
+                success: true,
+                data: data
+            })
+        })
+    .catch(() => res.status(400).json({
+        success: false,
+        msg:'this is a bad request'
+    }))
 }
 
 
