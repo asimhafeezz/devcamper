@@ -1,5 +1,7 @@
-import express, { Application, Request, Response } from 'express'
+import express, { Application } from 'express'
 import dotenv from 'dotenv'
+
+import morgan from 'morgan'
 
 //route files
 import bootcamps from './routes/bootcamp'
@@ -8,6 +10,9 @@ import bootcamps from './routes/bootcamp'
 dotenv.config({path:'./config/config.env'})
 
 const app: Application = express()
+
+//Dev logging middleware
+process.env.NODE_ENV === 'development' && app.use(morgan('dev'))
 
 // mount routers
 app.use('/api/v1/bootcamps' , bootcamps)
