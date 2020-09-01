@@ -1,16 +1,16 @@
 import express, { Application, Request, Response } from 'express'
 import dotenv from 'dotenv'
 
+//route files
+import bootcamps from './routes/bootcamp'
+
 //load env vars
 dotenv.config({path:'./config/config.env'})
 
 const app: Application = express()
 
-app.get('/' , (req: Request , res: Response) => {
-    res.send({
-        success:true
-    })
-})
+// mount routers
+app.use('/api/v1/bootcamps' , bootcamps)
 
 const PORT: number|string = process.env.PORT || 5000
 
