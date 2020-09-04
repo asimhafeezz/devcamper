@@ -1,7 +1,7 @@
 import express, { Application } from 'express'
 import dotenv from 'dotenv'
 import morgan from 'morgan'
-import {errorHandler} from './middleware/error'
+import errorHandler from './middleware/error'
 import { connectDB } from './config/db'
 import 'colors'
 

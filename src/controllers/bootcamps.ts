@@ -2,7 +2,7 @@ import {NextFunction, Request , Response} from 'express'
 
 // bootcamp model
 import BootcampModel from '../models/bootcamps'
-import errorResponse from '../utils/errorResponse'
+import ErrorResponse from '../utils/errorResponse'
 
 // @desc    get all bootcamps
 // @route   GET api/v1/bootcamps
@@ -12,10 +12,7 @@ export const getBootcamps = (req: Request , res: Response , next: NextFunction) 
     BootcampModel.find().then(data => {
 
         if(data.length === 0){
-            return res.status(400).json({
-                success: false,
-                msg:`did not found a bootcamp.`
-            })
+            return next( new ErrorResponse(`Bootcamp not found of id ${req.params.id}` , 404))
         }
         else{
         return res
@@ -41,37 +38,30 @@ export const getBootcamps = (req: Request , res: Response , next: NextFunction) 
 // @access  Public
 export const getBootcamp = async (req: Request , res: Response , next: NextFunction) => {
 
-    try{
-    const bootCamp = await  BootcampModel.findById(req.params.id)
+    BootcampModel.findById(req.params.id).then(data => {
+        
+        if(!data){
+            return next( new ErrorResponse(`No Bootcamp found` , 404))
+        }
 
-    if(!bootCamp){
-        return res.status(400).json({
-                success: true,
-                msg:`did not found a bootcamp of id ${req.params.id}`
-            })
-    }
+        res
+        .status(200)
+        .json({
+            success: true ,
+            data: data
+        })
 
-    res
-    .status(200)
-    .json({
-        success: true ,
-        data: bootCamp
     })
-
-    }
-    catch(err:any){
-
-    next(new errorResponse(err.message , 500))
-
-    }
-
+    .catch((err: any) => {
+    next(err)
+    })
 
 }
 
 // @desc    create a new bootcamp
 // @route   POST api/v1/bootcamps
 // @access  Public
-export const createBootcamp = (req: Request , res: Response) => {
+export const createBootcamp = (req: Request , res: Response , next: NextFunction) => {
     BootcampModel.create(req.body).then(data => {
     
         res
@@ -81,17 +71,14 @@ export const createBootcamp = (req: Request , res: Response) => {
                 data: data
             })
         })
-    .catch((err:Error) => res.status(400).json({
-        success: false,
-        msg: err.message
-    }))
+    .catch((err:any) => next(err))
 }
 
 
 // @desc    update a bootcamps
 // @route   PUT api/v1/bootcamps/:id
 // @access  Public
-export const updateBootcamp = async (req: Request , res: Response) => {
+export const updateBootcamp = async (req: Request , res: Response , next: NextFunction) => {
     try{
         const bootCamp = await  BootcampModel.findByIdAndUpdate(req.params.id , req.body , {
             new:true,
@@ -99,10 +86,7 @@ export const updateBootcamp = async (req: Request , res: Response) => {
         })
     
         if(!bootCamp){
-            return res.status(400).json({
-                    success: true,
-                    msg:`did not found a bootcamp of id ${req.params.id} to update`
-                })
+            return next( new ErrorResponse(`did not found a bootcamp of id ${req.params.id} to update` , 404))
         }
     
         res
@@ -115,11 +99,7 @@ export const updateBootcamp = async (req: Request , res: Response) => {
         }
         catch(err){
     
-        res
-        .status(400)
-        .json({
-            success: false
-        })
+        next(err)
     
         }
     
@@ -129,15 +109,12 @@ export const updateBootcamp = async (req: Request , res: Response) => {
 // @desc    delete a bootcamp
 // @route   Delete api/v1/bootcamps/:id
 // @access  Public
-export const deleteBootcamp = async (req: Request , res: Response) => {
+export const deleteBootcamp = async (req: Request , res: Response , next: NextFunction) => {
     try{
         const bootCamp = await  BootcampModel.findByIdAndDelete(req.params.id)
     
         if(!bootCamp){
-            return res.status(400).json({
-                    success: true,
-                    msg:`did not found a bootcamp of id ${req.params.id} to delete.`
-                })
+            return next( new ErrorResponse(`did not found a bootcamp of id ${req.params.id} to delete` , 404))
         }
     
         res
@@ -150,11 +127,7 @@ export const deleteBootcamp = async (req: Request , res: Response) => {
         }
         catch(err){
     
-        res
-        .status(400)
-        .json({
-            success: false
-        })
+        next(err)
     
         }
     
