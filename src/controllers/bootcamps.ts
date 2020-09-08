@@ -1,4 +1,5 @@
 import {NextFunction, Request , Response} from 'express'
+import { asyncHandler } from '../middleware/async'
 
 // bootcamp model
 import BootcampModel from '../models/bootcamps'
@@ -78,8 +79,8 @@ export const createBootcamp = (req: Request , res: Response , next: NextFunction
 // @desc    update a bootcamps
 // @route   PUT api/v1/bootcamps/:id
 // @access  Public
-export const updateBootcamp = async (req: Request , res: Response , next: NextFunction) => {
-    try{
+export const updateBootcamp = asyncHandler( async function(req: Request , res: Response , next: NextFunction) {
+    
         const bootCamp = await  BootcampModel.findByIdAndUpdate(req.params.id , req.body , {
             new:true,
             runValidators:true
@@ -96,21 +97,14 @@ export const updateBootcamp = async (req: Request , res: Response , next: NextFu
             data: bootCamp
         })
     
-        }
-        catch(err){
-    
-        next(err)
-    
-        }
-    
-}
+})
 
 
 // @desc    delete a bootcamp
 // @route   Delete api/v1/bootcamps/:id
 // @access  Public
-export const deleteBootcamp = async (req: Request , res: Response , next: NextFunction) => {
-    try{
+export const deleteBootcamp = asyncHandler( async (req: Request , res: Response , next: NextFunction) => {
+    
         const bootCamp = await  BootcampModel.findByIdAndDelete(req.params.id)
     
         if(!bootCamp){
@@ -122,13 +116,5 @@ export const deleteBootcamp = async (req: Request , res: Response , next: NextFu
         .json({
             success: true ,
             data: bootCamp
-        })
-    
-        }
-        catch(err){
-    
-        next(err)
-    
-        }
-    
-}
+        })  
+})

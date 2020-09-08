@@ -1,4 +1,5 @@
-import mongoose, { Schema , Document } from 'mongoose'
+import mongoose, { Schema , Document, HookNextFunction } from 'mongoose'
+import slugify from 'slugify'
 
 interface locationI {
     type: string,
@@ -125,6 +126,11 @@ const bootcampScheme: Schema = new mongoose.Schema({
           type: Date,
           default: Date.now()
       }
+})
+
+bootcampScheme.pre('save' , function(this : bootcampI , next: HookNextFunction){
+    this.slug = slugify(this.name , {lower: true})
+    next()
 })
 
 export default mongoose.model<bootcampI>('bootcamp' , bootcampScheme)
