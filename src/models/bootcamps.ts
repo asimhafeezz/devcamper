@@ -1,15 +1,16 @@
 import mongoose, { Schema , Document, HookNextFunction } from 'mongoose'
 import slugify from 'slugify'
+import { geocoder } from '../utils/geocoder'
 
 interface locationI {
-    type: string,
-    coordinates: number[],
-    formattedAddress: String,
-    street: string,
-    city: string,
-    state: string,
-    zipcode: string,
-    country: string
+    type: string | undefined,
+    coordinates: [number | undefined , number | undefined],
+    formattedAddress: string | undefined,
+    street: string | undefined,
+    city: string | undefined,
+    state: string | undefined,
+    zipcode: string | undefined,
+    country: string | undefined
 }
 
 export interface bootcampI extends Document{
@@ -18,6 +19,7 @@ export interface bootcampI extends Document{
     description: string,
     website: string,
     email: string,
+    address: string,
     location: locationI,
     careers: string[],
     averageRating: number,
@@ -59,7 +61,7 @@ const bootcampScheme: Schema = new mongoose.Schema({
         ]
     },
     address:{
-        type:String,
+        type: String,
         required:[
             true,
             'please add an address'
@@ -130,6 +132,27 @@ const bootcampScheme: Schema = new mongoose.Schema({
 
 bootcampScheme.pre('save' , function(this : bootcampI , next: HookNextFunction){
     this.slug = slugify(this.name , {lower: true})
+    next()
+})
+
+//Geocode& create location field
+bootcampScheme.pre('save' , async function(this: bootcampI , next: HookNextFunction){
+    const loc = await geocoder.geocode(this.address)
+    this.location = {
+        type:'Point',
+        coordinates: [loc[0].longitude , loc[0].latitude],
+        formattedAddress: loc[0].formattedAddress,
+        street: loc[0].streetName,
+        city: loc[0].city,
+        state: loc[0].stateCode,
+        zipcode: loc[0].zipcode,
+        country: loc[0].countryCode
+    }
+
+    console.log('location', loc)
+
+    //dont save address
+    // this.address = ''
     next()
 })
 

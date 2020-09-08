@@ -13,7 +13,7 @@ export const getBootcamps = (req: Request , res: Response , next: NextFunction) 
     BootcampModel.find().then(data => {
 
         if(data.length === 0){
-            return next( new ErrorResponse(`Bootcamp not found of id ${req.params.id}` , 404))
+            return next( new ErrorResponse(`No Bootcamp Found` , 404))
         }
         else{
         return res
