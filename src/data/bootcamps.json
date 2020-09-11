@@ -1,0 +1,41 @@
+[
+    {
+        "name":"Mern Stack Bootcamp",
+        "description":"this is the description for this bootcamp",
+        "website":"http://google.com",
+        "phone":"0333-5823297",
+        "email":"asim@gmail.com",
+        "address": "220 Pawtucket St, Lowell, MA 01854",
+        "career":["Web Development" , "Mobile Development"],
+        "housing": false,
+        "jobAssistance": true,
+        "jobGurrentee": false,
+        "acceptGi": true
+    },
+    {
+        "name":"Javascript Bootcamp",
+        "description":"this is the description for this bootcamp",
+        "website":"http://google.com",
+        "phone":"0333-5823297",
+        "email":"asim@gmail.com",
+        "address": "220 Pawtucket St, Lowell, MA 01854",
+        "career":["Web Development" , "Mobile Development"],
+        "housing": false,
+        "jobAssistance": true,
+        "jobGurrentee": false,
+        "acceptGi": true
+    },
+    {
+        "name":"Mongodb Bootcamp",
+        "description":"this is the description for this bootcamp",
+        "website":"http://google.com",
+        "phone":"0333-5823297",
+        "email":"asim@gmail.com",
+        "address": "220 Pawtucket St, Lowell, MA 01854",
+        "career":["Web Development" , "Mobile Development"],
+        "housing": false,
+        "jobAssistance": true,
+        "jobGurrentee": false,
+        "acceptGi": true
+    }
+]
